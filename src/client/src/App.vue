@@ -1,14 +1,14 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <InputForm />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import InputForm from './components/InputForm.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    InputForm
   }
 }
 </script>
