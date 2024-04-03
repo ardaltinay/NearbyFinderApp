@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 public class PlaceDto {
     private String name;
+    private String address;
     private double latitude;
     private double longitude;
     private int radius;
