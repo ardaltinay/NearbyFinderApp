@@ -1,6 +1,8 @@
 package com.nearbyfinder.NearbyFinderApp.service;
 
 import com.nearbyfinder.NearbyFinderApp.dto.PlaceDto;
+import com.nearbyfinder.NearbyFinderApp.entity.Place;
+import com.nearbyfinder.NearbyFinderApp.mapper.PlaceMapper;
 import com.nearbyfinder.NearbyFinderApp.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,12 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    public List<PlaceDto> getNearbyPlaces(double latitude, double longitude, double radius) {
+    public List<PlaceDto> getNearbyPlaces(double latitude, double longitude, int radius) {
         return new ArrayList<>();
+    }
+
+    public List<PlaceDto> findByLatitudeAndLongitudeAndRadius(double latitude, double longitude, int radius) {
+        List<Place> places = placeRepository.findByLatitudeAndLongitudeAndRadius(latitude, longitude, radius);
+        return PlaceMapper.entityListToDtoList(places);
     }
 }

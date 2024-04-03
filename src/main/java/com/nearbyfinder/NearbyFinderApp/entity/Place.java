@@ -1,10 +1,7 @@
 package com.nearbyfinder.NearbyFinderApp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "places")
@@ -12,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,4 +17,5 @@ public class Place {
     private String name;
     private double latitude;
     private double longitude;
+    private int radius;
 }
