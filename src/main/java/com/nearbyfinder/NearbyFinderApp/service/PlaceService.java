@@ -21,19 +21,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaceService {
 
-    @Value("google.maps.api.key")
+    @Value("${google.maps.api.key}")
     private String GOOGLE_MAPS_API_KEY;
 
-    private final String URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius={radius}&key={key}";
+    @Value("${google.maps.api.url}")
+    private String URL;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private final PlaceRepository placeRepository;
 
     public List<PlaceDto> getNearbyPlaces(double latitude, double longitude, int radius) {
-        List<Place> places = getPlaces(latitude, longitude, radius);
-        return PlaceMapper.entityListToDtoList(places);
+        List<PlaceDto> placeDtoList = findByLatitudeAndLongitudeAndRadius(latitude, longitude, radius);
+        if (placeDtoList.isEmpty()) {
+            List<Place> places = getPlaces(latitude, longitude, radius);
+            List<Place> savedPlaces = placeRepository.saveAll(places);
+            return PlaceMapper.entityListToDtoList(savedPlaces);
+        }
+        return placeDtoList;
     }
 
     @Cacheable(value = "places", key = "{#latitude, #longitude, #radius}")
