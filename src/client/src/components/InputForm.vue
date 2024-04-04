@@ -21,10 +21,10 @@
     <div v-if="loading">Loading...</div>
     <ul class="list-group list-group-flush mt-5" v-if="places.length && !error">
       <li class="list-group-item" v-for="place in places" :key="generateKey(place)">
-        {{ place.name }} - (lat: {{ place.latitude }}, lng: {{ place.longitude }})
+        {{ place.name }} - lat: {{ place.latitude }}, lng: {{ place.longitude }}
       </li>
     </ul>
-    <div class="mt-5" v-if="error">{{ error }}</div>
+    <div class="mt-5 text-danger" v-if="error">{{ error }}</div>
   </div>
 </template>
 
@@ -56,6 +56,7 @@ export default {
         });
         const data = await response.data;
         this.places = data;
+        this.error = null;
       } catch(error) {
         if (error.response != undefined && error.response != null) {
           this.error = error.response.data.message;

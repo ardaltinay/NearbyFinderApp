@@ -1,6 +1,7 @@
 package com.nearbyfinder.NearbyFinderApp.exception;
 
 import com.nearbyfinder.NearbyFinderApp.model.response.GenericErrorResponse;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,6 +34,13 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
             errors.add(objectError.getObjectName() + ": " + objectError.getDefaultMessage());
         }
         return buildErrorResponseEntity(new GenericErrorResponse(HttpStatus.BAD_REQUEST, errors, LocalDateTime.now()));
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+                                                        HttpStatusCode status, WebRequest request) {
+        String error = ex.getPropertyName() + " should be of type " + Objects.requireNonNull(ex.getRequiredType()).getName();
+        return buildErrorResponseEntity(new GenericErrorResponse(HttpStatus.BAD_REQUEST, error, LocalDateTime.now()));
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
