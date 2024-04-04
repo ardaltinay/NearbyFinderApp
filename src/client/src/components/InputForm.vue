@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>Search Nearby Places</h2>
-    <form class="row align-items-center justify-content-center g-3" @submit.prevent="searchPlaces">
+    <form class="row align-items-center justify-content-center g-3 mt-3" @submit.prevent="searchPlaces">
       <div class="col-auto d-flex align-items-center justify-content-center">
         <label for="">Longitude:</label>
         <input type="text" class="form-control ms-1" placeholder="Longitude" v-model="longitude">
@@ -19,12 +19,12 @@
       </div> 
     </form>
     <div v-if="loading">Loading...</div>
-    <ul v-if="places.length">
-      <li v-for="place in places" :key="place.name">
+    <ul class="mt-5" v-if="places.length && !error">
+      <li v-for="place in places" :key="generateKey(place)">
         {{ place.name }} - {{ place.latitude }}, {{ place.longitude }}
       </li>
     </ul>
-    <div v-if="error">{{ error }}</div>
+    <div class="mt-5" v-if="error">{{ error }}</div>
   </div>
 </template>
 
@@ -54,13 +54,16 @@ export default {
             radius: this.radius
           }
         });
-        const data = await response.json();
+        const data = await response.data;
         this.places = data;
       } catch(error) {
         this.error = 'An error occurred while fetching nearby places. Details: ' + error;
       } finally {
         this.loading = false;
       }
+    },
+    generateKey(place) {
+      return place.latitude + place.longitude + place.radius;
     }
   }
 }
