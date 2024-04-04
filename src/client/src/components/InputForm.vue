@@ -19,9 +19,9 @@
       </div> 
     </form>
     <div v-if="loading">Loading...</div>
-    <ul class="mt-5" v-if="places.length && !error">
-      <li v-for="place in places" :key="generateKey(place)">
-        {{ place.name }} - {{ place.latitude }}, {{ place.longitude }}
+    <ul class="list-group list-group-flush mt-5" v-if="places.length && !error">
+      <li class="list-group-item" v-for="place in places" :key="generateKey(place)">
+        {{ place.name }} - (lat: {{ place.latitude }}, lng: {{ place.longitude }})
       </li>
     </ul>
     <div class="mt-5" v-if="error">{{ error }}</div>
@@ -57,7 +57,11 @@ export default {
         const data = await response.data;
         this.places = data;
       } catch(error) {
-        this.error = 'An error occurred while fetching nearby places. Details: ' + error;
+        if (error.response != undefined && error.response != null) {
+          this.error = error.response.data.message;
+        } else {
+          this.error = 'An error occurred while fetching nearby places. Details: ' + error;
+        }
       } finally {
         this.loading = false;
       }
