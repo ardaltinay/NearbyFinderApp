@@ -8,7 +8,6 @@ import com.nearbyfinder.NearbyFinderApp.model.response.PlaceResponse;
 import com.nearbyfinder.NearbyFinderApp.model.response.PlacesNearbySearchResponse;
 import com.nearbyfinder.NearbyFinderApp.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,18 +31,23 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     public List<PlaceDto> getNearbyPlaces(double latitude, double longitude, int radius) {
-        List<PlaceDto> placeDtoList = findByLatitudeAndLongitudeAndRadius(latitude, longitude, radius);
+        double searchParam = latitude + longitude + radius;
+        List<PlaceDto> placeDtoList = findBySearchParam(searchParam);
         if (placeDtoList.isEmpty()) {
             List<Place> places = getPlaces(latitude, longitude, radius);
+            places.forEach(place -> {
+                place.setRadius(radius);
+                place.setSearchParam(searchParam);
+            });
             List<Place> savedPlaces = placeRepository.saveAll(places);
             return PlaceMapper.entityListToDtoList(savedPlaces);
         }
         return placeDtoList;
     }
 
-    @Cacheable(value = "places", key = "{#latitude, #longitude, #radius}")
-    public List<PlaceDto> findByLatitudeAndLongitudeAndRadius(double latitude, double longitude, int radius) {
-        List<Place> places = placeRepository.findByLatitudeAndLongitudeAndRadius(latitude, longitude, radius);
+    @Cacheable(value = "places", key = "#searchParam")
+    public List<PlaceDto> findBySearchParam(double searchParam) {
+        List<Place> places = placeRepository.findBySearchParam(searchParam);
         return PlaceMapper.entityListToDtoList(places);
     }
 

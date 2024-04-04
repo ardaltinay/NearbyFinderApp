@@ -19,4 +19,5 @@ public class Place {
     private double latitude;
     private double longitude;
     private int radius;
+    private double searchParam;
 }
