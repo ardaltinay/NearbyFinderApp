@@ -46,7 +46,7 @@ public class PlaceService {
     }
 
     @Cacheable(value = "places", key = "#searchParam")
-    public List<PlaceDto> findBySearchParam(double searchParam) {
+    private List<PlaceDto> findBySearchParam(double searchParam) {
         List<Place> places = placeRepository.findBySearchParam(searchParam);
         return PlaceMapper.entityListToDtoList(places);
     }
