@@ -68,12 +68,4 @@ public class PlaceService {
         return PlaceMapper.placeResponseListToEntityList(responsesDataFromGoogleApi);
     }
 
-
-
-
-
-
-
-
-
 }
