@@ -10,7 +10,6 @@ COPY pom.xml .
 # Copy the rest of the project files to the container
 COPY src ./src/
 
-RUN mvn clean install
 # Build the project
 RUN mvn clean package -DskipTests
 
