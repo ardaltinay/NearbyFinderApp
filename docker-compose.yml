@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ardaltinay/nearby-finder
+    image: ardaltinay/nearby-finder:1.0
     ports:
       - 8070:8070
     depends_on:
