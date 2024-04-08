@@ -7,6 +7,7 @@ NearbyFinderApp is a simple web application that helps users find nearby places 
 - Java(JDK17)
 - Spring Boot(3.*)
 - Spring Data JPA
+- Vue 3
 - Mysql 8.0.*
 - Maven 3.*
 - Docker
